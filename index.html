@@ -2868,6 +2868,45 @@ body, main, #bookPage, #bookMonthArea {
 .top-nav .nav-btn:nth-child(2){background:#c58a2b!important;color:#fff!important}
 .top-nav .nav-btn:nth-child(3){background:#6b70bd!important;color:#fff!important}
 </style>
+
+<style id="simplified-main-navigation">
+/* メインメニューを3つに整理し、スマートフォンで読みやすく縦並びにする */
+.top-nav {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 10px !important;
+  margin: 14px 0 18px !important;
+}
+.top-nav .nav-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  min-height: 62px !important;
+  box-sizing: border-box !important;
+  padding: 15px 18px !important;
+  border: 0 !important;
+  border-radius: 17px !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  white-space: normal !important;
+  box-shadow: 0 5px 14px rgba(35, 91, 120, .12) !important;
+}
+.top-nav .nav-btn:nth-child(1) { background: #287f8b !important; color: #fff !important; }
+.top-nav .nav-btn:nth-child(2) { background: #6b70bd !important; color: #fff !important; }
+.top-nav .nav-btn:nth-child(3) { background: #159bd0 !important; color: #fff !important; }
+.template-settings-entry {
+  width: 100% !important;
+  min-height: 52px !important;
+  margin: 10px 0 8px !important;
+  font-size: 17px !important;
+}
+@media (min-width: 700px) {
+  .top-nav { grid-template-columns: minmax(0, 1fr) !important; max-width: 760px; }
+}
+</style>
 </head>
 <body>
 <main>
@@ -2883,9 +2922,8 @@ body, main, #bookPage, #bookMonthArea {
   記録した歩みが、あとから見返せる一冊になります。
 </div>
 
-<div class="top-nav">
-  <button class="nav-btn secondary" onclick="showTemplates()">📋 テンプレート</button>
-  <button class="nav-btn" style="background:#287f8b;color:#fff" onclick="showTimeAxis()">🕒 時間軸</button>
+<div class="top-nav" aria-label="メインメニュー">
+  <button class="nav-btn" onclick="showTimeAxis()">🕒 時間軸・予定テンプレート</button>
   <button class="nav-btn secondary" onclick="showBook()">📖 歩みを振り返る</button>
   <button class="nav-btn" onclick="showInput()">✏️ 記録する</button>
 </div>
@@ -2956,7 +2994,7 @@ body, main, #bookPage, #bookMonthArea {
     <select id="timeAxisTemplateSelect" onchange="renderTimeAxis()" style="width:100%;padding:12px;border-radius:12px;margin:8px 0 16px"></select>
     <button type="button" class="template-add-row" onclick="addTimeAxisItem()" style="width:100%;margin:0 0 16px">＋ 大まかな時間軸に項目を追加</button>
     <div id="timeAxisCards"></div>
-    <div id="timeAxisEmpty" class="note" style="display:none">まだテンプレートがありません。「テンプレート」から、いつもの予定を登録してください。</div>
+    <div id="timeAxisEmpty" class="note" style="display:none">まだ予定テンプレートがありません。「設定」内の「テンプレートを作成・編集」から登録してください。</div>
   </div>
 </section>
 
@@ -3023,17 +3061,25 @@ body, main, #bookPage, #bookMonthArea {
       <button type="button" class="style-choice" id="styleMichi" onclick="setAppStyle('michi')">🙏 お道の方向け<br><span>おたすけ・おつとめなど</span></button>
     </div>
   </div>
+  <button type="button" class="small-btn secondary-btn template-settings-entry" onclick="showTemplates()">📋 テンプレートを作成・編集</button>
   <button class="small-btn" onclick="openSettings()">⚙️ 記録項目を設定する</button>
 </div>
 
 <div id="settingsModal" class="modal" style="display:none">
   <div class="modal-inner">
-    <div class="modal-title">⚙️ 記録項目の設定</div>
-    <div class="modal-desc">使う項目だけ表示できます。☑を外しても過去の記録は削除されません。<br>↑↓で、記録画面に表示する順番を変えられます。</div>
+    <div class="modal-title">⚙️ 記録・表示の設定</div>
+    <div class="modal-desc">この画面では、記録する項目や表示順、日誌の見た目、よく行く場所などを設定できます。<br>各項目の説明を見ながら、自分に合う形に整えてください。</div>
+    <div class="template-settings-shortcut" style="margin:12px 0 18px;padding:12px;border:1px solid #b8dbe5;border-radius:14px;background:#f0f9fc">
+      <div style="font-weight:800;margin-bottom:6px">📋 いつもの予定を登録したいとき</div>
+      <div class="modal-desc">時間帯や項目名、場所を登録して、毎日の記録を簡単にできます。</div>
+      <button type="button" class="small-btn secondary-btn" style="width:100%;margin-top:8px" onclick="closeSettings();showTemplates()">📋 テンプレートを作成・編集</button>
+    </div>
+    <div class="settings-section-heading">① 記録する項目を選ぶ</div>
+    <div class="modal-desc">チェックを入れた項目が記録画面に表示されます。↑↓で順番を変更できます。チェックを外しても、過去の記録は消えません。</div>
     <div id="settingsItems"></div>
     <div class="diary-design-settings" style="margin:14px 0 18px">
-      <div class="modal-title" style="font-size:16px">📖 日誌のデザイン</div>
-      <div class="modal-desc">「今日の日誌」の雰囲気を選べます。</div>
+      <div class="settings-section-heading">② 日誌の見た目を選ぶ</div>
+      <div class="modal-desc">「今日の日誌」のデザインを選びます。いつでも変更できます。</div>
       <select id="diaryDesignSelect" style="width:100%;margin-top:8px">
         <option value="notebook">📒 B：ノート風（おすすめ）</option>
         <option value="simple">📘 A：シンプル</option>
@@ -3044,8 +3090,8 @@ body, main, #bookPage, #bookMonthArea {
     <button onclick="saveSettings()">設定を保存</button>
 
     <div class="settings-other-walk-area">
-      <div class="modal-title" style="font-size:16px">🌱 その他の歩みを追加</div>
-      <div class="modal-desc">自分で使いたい歩みの項目を追加できます。追加した項目は、メイン画面の「今日の歩み」に表示されます。</div>
+      <div class="settings-section-heading">③ 自分用の記録項目を追加</div>
+      <div class="modal-desc">標準にない項目も追加できます。追加した項目は、メイン画面の「今日の歩み」に表示されます。</div>
       <button type="button" id="addOtherWalkBtn" class="small-btn secondary-btn">＋ その他の歩みを追加する</button>
       <div id="otherWalkCategoryInput" class="other-walk-category-input" style="display:none">
         <label for="otherWalkCategoryName">追加する項目名</label>
@@ -8379,6 +8425,9 @@ function applyGeneralHome(){
 </style>
 <style id="favorite-places-settings-style">
 .favorite-places-settings-panel{margin:18px 0;padding:15px;border:1px solid #c9e1eb;border-radius:14px;background:#f6fbfd}
+.settings-section-heading{margin:18px 0 7px;padding:10px 12px;border-left:5px solid #287f8b;border-radius:7px;background:#edf7f7;color:#245e69;font-size:17px;font-weight:800;line-height:1.45}
+#settingsModal .diary-design-settings{padding:12px;border:1px solid #d7e8ed;border-radius:12px;background:#f8fbfc}
+#settingsModal .settings-other-walk-area,#settingsModal .category-area{margin-top:18px;padding:12px;border:1px solid #d7e8ed;border-radius:12px;background:#fbfcfd}
 .favorite-places-settings-title{font-size:17px;font-weight:800;color:#286f91;margin-bottom:6px}
 .favorite-places-settings-desc{font-size:13px;line-height:1.7;color:#557080;margin-bottom:10px}
 .favorite-places-settings-add{display:flex;gap:8px;align-items:center}
@@ -8414,8 +8463,8 @@ function applyGeneralHome(){
       panel=document.createElement('section');
       panel.id='favoritePlacesSettingsPanel';
       panel.className='favorite-places-settings-panel';
-      panel.innerHTML=`<div class="favorite-places-settings-title">📍 よく行く場所の登録</div>
-        <div class="favorite-places-settings-desc">教会本部・所属教会・上級教会など、よく使う場所を登録できます。登録した場所は行事入力で選べます。</div>
+      panel.innerHTML=`<div class="settings-section-heading">④ よく行く場所を登録・管理</div>
+        <div class="favorite-places-settings-desc">行事の記録で何度も使う場所を登録しておくと、毎回入力せずに選べます。例：教会本部・所属教会・上級教会</div>
         <div class="favorite-places-settings-add"><input type="text" id="favoritePlaceSettingsInput" placeholder="例：○○分教会、教会本部" aria-label="登録する場所"><button type="button" id="favoritePlaceSettingsAddBtn">＋ 登録</button></div>
         <div id="favoritePlacesSettingsList" class="favorite-places-settings-list"></div>`;
       const saveButton=modal.querySelector('button[onclick="saveSettings()"]');
@@ -8743,6 +8792,52 @@ const _timeAxisOriginalShowInput=showInput;showInput=function(){document.getElem
 const _timeAxisOriginalShowTemplates=showTemplates;showTemplates=function(){document.getElementById('timeAxisView').style.display='none';_timeAxisOriginalShowTemplates();};
 const _timeAxisOriginalShowBook=showBook;showBook=function(){document.getElementById('timeAxisView').style.display='none';_timeAxisOriginalShowBook();};
 document.addEventListener('DOMContentLoaded',renderTimeAxis);
+</script>
+
+
+
+<style>
+/* Button feedback: visual press state */
+button, [role="button"], .nav-btn, .small-btn, .template-add-row {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+}
+button:active, [role="button"]:active, .nav-btn:active, .small-btn:active, .template-add-row:active,
+button.button-pressed, [role="button"].button-pressed {
+  transform: scale(.965) !important;
+  filter: brightness(.88) saturate(1.08) !important;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.16) !important;
+}
+button:focus-visible, [role="button"]:focus-visible {
+  outline: 3px solid rgba(40,127,139,.45);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  button, [role="button"], .nav-btn, .small-btn, .template-add-row { transition: none !important; }
+}
+</style>
+<script>
+/* 全ボタン共通：押した瞬間の視覚フィードバック。対応端末のみ短い振動も試す */
+(function(){
+  let pressedTimer;
+  document.addEventListener('pointerdown', function(event){
+    const button = event.target.closest('button, [role="button"]');
+    if (!button || button.disabled) return;
+    button.classList.add('button-pressed');
+    clearTimeout(pressedTimer);
+    pressedTimer = setTimeout(function(){ button.classList.remove('button-pressed'); }, 180);
+    try {
+      if (navigator.vibrate) navigator.vibrate(12);
+    } catch (e) {}
+  }, {passive:true});
+  ['pointerup','pointercancel','pointerleave'].forEach(function(type){
+    document.addEventListener(type, function(event){
+      const button = event.target.closest && event.target.closest('button, [role="button"]');
+      if (button) setTimeout(function(){button.classList.remove('button-pressed');}, 80);
+    }, {passive:true});
+  });
+})();
 </script>
 
 </body>
